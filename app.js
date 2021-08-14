@@ -23,7 +23,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://loving-banach-b7319b.netlify.app',
+      'https://loving-nobel-15448e.netlify.app',
     ],
     credentials: true,
   })
