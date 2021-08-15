@@ -15,7 +15,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({
         message: 'Email or password is not correct!',
       });
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid)
       return res.status(400).json({
         message: 'Email or password is not correct!',
@@ -24,6 +26,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.CLIENT_SECRET);
     return res.json({ token, user });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: 'Login failed!',
     });
@@ -39,10 +42,10 @@ router.post('/signup', async (req, res) => {
     });
 
   const salt = await bcrypt.genSalt(10);
-  const hashPw = await bcrypt.hash(password, salt);
+  const hashPassword = await bcrypt.hash(password, salt);
   user = new User({
     email,
-    password: hashPw,
+    password: hashPassword,
   });
   user = await user.save();
   const token = jwt.sign({ _id: user._id }, process.env.CLIENT_SECRET);
