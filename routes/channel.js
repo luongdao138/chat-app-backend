@@ -3,6 +3,25 @@ const verifyToken = require('../middlewares/verifyToken');
 const Channel = require('../models/Channel');
 const User = require('../models/User');
 
+router.get('/search', async (req, res) => {
+  try {
+    const { searchTerm } = req.query;
+    console.log(searchTerm);
+    const channels = await Channel.find(
+      {
+        name: {
+          $regex: new RegExp(searchTerm, 'i'),
+        },
+      },
+      '_id name'
+    );
+    return res.json(channels);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Internal server error!' });
+  }
+});
+
 // router.use(verifyToken);
 router.get('/:id', async (req, res) => {
   try {
